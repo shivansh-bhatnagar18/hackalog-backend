@@ -14,6 +14,7 @@ drf-yasg = "*"
 pyaescrypt = "*"
 firebase-admin = "*"
 djangorestframework = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.8"
