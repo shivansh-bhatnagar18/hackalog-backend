@@ -14,6 +14,7 @@ import django_heroku
 import firebase_admin
 import os
 import pyAesCrypt
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -105,8 +106,13 @@ WSGI_APPLICATION = 'hackalog.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        "NAME" : config('DBNAME'),
+        "USER" : config('DBUSERNAME'),
+        "PASSWORD" : config('DBPASSWORD'),
+        "HOST" : config('DBHOST') ,
+        "PORT" : '5432' ,
+        
     }
 }
 
@@ -159,9 +165,9 @@ with open('firebase_admin.aes', 'rb') as encrypted_file:
         pyAesCrypt.decryptStream(
             encrypted_file,
             decrypted_file,
-            os.environ.get('FIREBASE_DECRYPT_KEY'),
+            config('FIREBASE_DECRYPT_KEY'),
             64*1024,
-            int(os.environ.get('FIREBASE_DECRYPT_SIZE'))
+            int(config('FIREBASE_DECRYPT_SIZE'))
         )
 
 credentials = firebase_admin.credentials.Certificate(os.path.join(BASE_DIR, 'firebase_admin.json'))
