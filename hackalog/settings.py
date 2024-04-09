@@ -173,9 +173,9 @@ with open('firebase_admin.aes', 'rb') as encrypted_file:
         pyAesCrypt.decryptStream(
             encrypted_file,
             decrypted_file,
-            config('FIREBASE_DECRYPT_KEY'),
+            'shivansh',
             64*1024,
-            int(config('FIREBASE_DECRYPT_SIZE'))
+            2711,
         )
 
 credentials = firebase_admin.credentials.Certificate(os.path.join(BASE_DIR, 'firebase_admin.json'))
